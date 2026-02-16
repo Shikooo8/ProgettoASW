@@ -1,72 +1,86 @@
 package asw.bettermusic.connessioni.domain;
 
-import org.springframework.stereotype.Service;
+import com.bettermusic.connessioni.api.event.ConnessionCreatedEvent;
+import com.bettermusic.connessioni.api.event.ConnessionDeletedEvent;
+import com.bettermusic.connessioni.api.event.ConnessionEventProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*; 
+import java.util.Collection;
 
 @Service
 public class ConnessioniServiceImpl implements ConnessioniService {
 
-	@Autowired
-	private ConnessioniRepository connessioniRepository;
+    @Autowired
+    private ConnessioniRepository connessioniRepository;
 
-	/* Crea una nuova connessione, dati utente, seguito e ruolo. */ 
- 	public Connessione createConnessione(String utente, String seguito, String ruolo) {
-		Connessione connessione = new Connessione(utente, seguito, ruolo); 
-		try {
-			connessione = connessioniRepository.save(connessione);
-			return connessione;
-		} catch(Exception e) {
-			/* si potrebbe verificare un'eccezione se è violato il vincolo di unicità della connessione */ 
-			return null; 
-		}
-	}
+    @Autowired
+    private ConnessionEventProducer eventProducer;
 
-	/* Trova una connessione, dato l'id. */ 
- 	public Connessione getConnessione(Long id) {
-		Connessione connessione = connessioniRepository.findById(id).orElse(null);
-		return connessione;
-	}
+    /* Crea una nuova connessione, dati utente, seguito e ruolo. */
+    @Override
+    @Transactional
+    public Connessione createConnessione(String utente, String seguito, String ruolo) {
+        // verifica unicità
+        if (connessioniRepository.findByUtenteAndSeguitoAndRuolo(utente, seguito, ruolo) != null) {
+            return null; // oppure lancia eccezione personalizzata
+        }
 
-	/* Trova una connessione, dati utente, seguito e ruolo. */ 
-	public Connessione getConnessione(String utente, String seguito, String ruolo) {
-		Connessione connessione = connessioniRepository.findByUtenteAndSeguitoAndRuolo(utente, seguito, ruolo);
-		return connessione;
-	}
+        Connessione connessione = new Connessione(utente, seguito, ruolo);
+        connessione = connessioniRepository.save(connessione);
 
-	/* Trova tutte le connessioni. */ 
- 	public Collection<Connessione> getConnessioni() {
-		Collection<Connessione> connessioni = connessioniRepository.findAll();
-		return connessioni;
-	}
+        // invio evento
+        eventProducer.sendCreatedEvent(new ConnessionCreatedEvent(connessione.getId(), utente, seguito));
 
-	/* Trova tutte le connessioni di un utente. */ 
-	public Collection<Connessione> getConnessioniByUtente(String utente) {
-		Collection<Connessione> connessioni = connessioniRepository.findByUtente(utente);
-		return connessioni;
-	}
+        return connessione;
+    }
 
-	/* Trova tutte le connessioni con un certo ruolo. */ 
-	public Collection<Connessione> getConnessioniByRuolo(String ruolo) {
-		Collection<Connessione> connessioni = connessioniRepository.findByRuolo(ruolo);
-		return connessioni;
-	}
+    /* Trova una connessione, dato l'id. */
+    @Override
+    public Connessione getConnessione(Long id) {
+        return connessioniRepository.findById(id).orElse(null);
+    }
 
-	/* Trova tutte le connessioni di un utente con un certo ruolo. */ 
-	public Collection<Connessione> getConnessioniByUtenteAndRuolo(String utente, String ruolo) {
-		Collection<Connessione> connessioni = connessioniRepository.findByUtenteAndRuolo(utente, ruolo);
-		return connessioni;
-	}
+    /* Trova una connessione, dati utente, seguito e ruolo. */
+    @Override
+    public Connessione getConnessione(String utente, String seguito, String ruolo) {
+        return connessioniRepository.findByUtenteAndSeguitoAndRuolo(utente, seguito, ruolo);
+    }
 
-	/* Cancella una connessione, dati utente, seguito e ruolo. */ 
- 	public Connessione deleteConnessione(String utente, String seguito, String ruolo) {
-		Connessione connessione = getConnessione(utente, seguito, ruolo); 
-		if (connessione!=null) {
-			connessioniRepository.delete(connessione);
-		}
-		return connessione; 
-	}
+    /* Trova tutte le connessioni. */
+    @Override
+    public Collection<Connessione> getConnessioni() {
+        return connessioniRepository.findAll();
+    }
 
+    /* Trova tutte le connessioni di un utente. */
+    @Override
+    public Collection<Connessione> getConnessioniByUtente(String utente) {
+        return connessioniRepository.findByUtente(utente);
+    }
 
+    /* Trova tutte le connessioni con un certo ruolo. */
+    @Override
+    public Collection<Connessione> getConnessioniByRuolo(String ruolo) {
+        return connessioniRepository.findByRuolo(ruolo);
+    }
+
+    /* Trova tutte le connessioni di un utente con un certo ruolo. */
+    @Override
+    public Collection<Connessione> getConnessioniByUtenteAndRuolo(String utente, String ruolo) {
+        return connessioniRepository.findByUtenteAndRuolo(utente, ruolo);
+    }
+
+    /* Cancella una connessione, dati utente, seguito e ruolo. */
+    @Override
+    @Transactional
+    public Connessione deleteConnessione(String utente, String seguito, String ruolo) {
+        Connessione connessione = getConnessione(utente, seguito, ruolo);
+        if (connessione != null) {
+            connessioniRepository.delete(connessione);
+            eventProducer.sendDeletedEvent(new ConnessionDeletedEvent(connessione.getId()));
+        }
+        return connessione;
+    }
 }

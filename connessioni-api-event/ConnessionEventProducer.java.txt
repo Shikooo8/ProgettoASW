@@ -1,0 +1,22 @@
+package com.bettermusic.connessioni.api.event;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ConnessionEventProducer {
+
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    private static final String TOPIC = "connessioni";
+
+    public void sendCreatedEvent(ConnessionCreatedEvent event) {
+        kafkaTemplate.send(TOPIC, event);
+    }
+
+    public void sendDeletedEvent(ConnessionDeletedEvent event) {
+        kafkaTemplate.send(TOPIC, event);
+    }
+}

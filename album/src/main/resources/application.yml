@@ -29,3 +29,7 @@ server:
 #spring.jpa.show-sql: true
 # disable OSIV
 spring.jpa.open-in-view: false
+
+asw.kafka.channel.out=album-created-topic
+# Configura anche i serializer per inviare oggetti JSON [cite: 1208-1210]
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer

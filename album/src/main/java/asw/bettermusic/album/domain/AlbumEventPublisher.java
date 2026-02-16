@@ -1,4 +1,4 @@
-package asw.bettermusic.albumservice.domain;
+package asw.bettermusic.album.domain;
 
 import asw.bettermusic.common.api.event.DomainEvent;
 

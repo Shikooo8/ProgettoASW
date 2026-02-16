@@ -1,4 +1,4 @@
-package asw.bettermusic.albumservice.api.event;
+package asw.bettermusic.album.api.event;
 
 
 public class AlbumServiceEventChannel {

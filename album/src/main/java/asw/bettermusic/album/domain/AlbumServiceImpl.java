@@ -23,7 +23,7 @@ public class AlbumServiceImpl implements AlbumService {
 		try {
 			album = albumRepository.save(album);
 
-			DomainEvent event = new AlbumCreatedEvent(album.getId(), album.getTitolo(), album.getArtista());
+			DomainEvent event = new AlbumCreatedEvent(album.getId(), album.getTitolo(), album.getArtista(), album.getGeneri());
         	albumEventPublisher.publish(event);
 
 			return album;

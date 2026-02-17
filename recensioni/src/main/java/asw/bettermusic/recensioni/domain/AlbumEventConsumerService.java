@@ -1,6 +1,12 @@
 package asw.bettermusic.album.domain;
 
 import asw.bettermusic.common.api.event.DomainEvent;
+import asw.bettermusic.album.api.event.*;
+
+import org.springframework.stereotype.Service;
+
+import java.util.*; 
+
 
 
 @Service
@@ -13,19 +19,18 @@ public class AlbumEventConsumerService{
     private AlbumRepository albumRepository;
 
     public void onEvent(DomainEvent event){
-        if(event instanceof AlbumCreatedEvent evnt){
-            handleAlbumCreatedEvent(evnt);
+//        private final Logger logger = Logger.getLogger(this.getClass().toString());
+        if(event instanceof AlbumCreatedEvent evt){
+            handleAlbumCreatedEvent(evt);
         }
     }
 
     public void handleAlbumCreatedEvent(AlbumCreatedEvent e){
-        Album album= new Album(e.getId(), e.getTitolo, e.getArtista(), e.getGeneri());
+        Album album= new Album(e.getId(), e.getTitolo(), e.getArtista(), e.getGeneri());
 
-        albumRepository.save(album);        //occhio a questo! Non trovo il metodo! 
+        albumRepository.save(album);        //il metodo si trova in AlbumRepository del servizio Recensioni 
 
-        //ma deve essere memorizzata in una tabella di Album di Recensioni?? 
-
-        //mi sa che non c'è un costruttore di album che prenede l'id
+        //il costruttore è stato definito automaticamente basandosi sull'ordine dei campi definiti in Recensioni/.../Album
     }
     
 }

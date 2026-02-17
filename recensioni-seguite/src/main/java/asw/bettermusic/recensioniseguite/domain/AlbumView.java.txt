@@ -1,0 +1,20 @@
+package asw.bettermusic.recensioniseguite.domain;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+public class AlbumView {
+
+    @Id
+    private Long id;
+
+    private String titolo;
+    private String artista;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> generi = new HashSet<>();
+}

@@ -1,0 +1,11 @@
+@Entity
+@Data
+@NoArgsConstructor
+public class ConnessioneView {
+
+    @Id
+    private Long id;
+
+    private String userId;
+    private String targetId;
+}

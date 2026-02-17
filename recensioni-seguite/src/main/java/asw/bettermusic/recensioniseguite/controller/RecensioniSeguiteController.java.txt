@@ -1,0 +1,20 @@
+@RestController
+@RequestMapping("/recensioni-seguite")
+public class RecensioniSeguiteController {
+
+    @Autowired
+    private AlbumViewRepository albumRepo;
+
+    @Autowired
+    private RecensioneViewRepository recensioneRepo;
+
+    @GetMapping("/album")
+    public List<AlbumView> getAlbum() {
+        return albumRepo.findAll();
+    }
+
+    @GetMapping("/recensioni")
+    public List<RecensioneView> getRecensioni() {
+        return recensioneRepo.findAll();
+    }
+}

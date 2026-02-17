@@ -1,5 +1,7 @@
 package asw.bettermusic.recensioni.domain;
 
+import jakarta.persistence.*; 
+
 import lombok.*; 
 
 import java.util.*; 

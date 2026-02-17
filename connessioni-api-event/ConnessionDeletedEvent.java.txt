@@ -1,0 +1,11 @@
+package com.bettermusic.connessioni.api.event;
+
+public class ConnessionDeletedEvent {
+    private String connessioneId;
+
+    public ConnessionDeletedEvent(String connessioneId) {
+        this.connessioneId = connessioneId;
+    }
+
+    public String getConnessioneId() { return connessioneId; }
+}

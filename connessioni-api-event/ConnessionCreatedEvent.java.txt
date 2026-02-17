@@ -1,0 +1,17 @@
+package com.bettermusic.connessioni.api.event;
+
+public class ConnessionCreatedEvent {
+    private String connessioneId;
+    private String userId;
+    private String targetId;
+
+    public ConnessionCreatedEvent(String connessioneId, String userId, String targetId) {
+        this.connessioneId = connessioneId;
+        this.userId = userId;
+        this.targetId = targetId;
+    }
+
+    public String getConnessioneId() { return connessioneId; }
+    public String getUserId() { return userId; }
+    public String getTargetId() { return targetId; }
+}

@@ -1,127 +1,91 @@
-package asw.bettermusic.connessioni.rest;
+package com.bettermusic.connessioni.controller;
 
-import asw.bettermusic.connessioni.domain.*;
-
-import asw.bettermusic.connessioni.api.rest.*;
-
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable; 
-import org.springframework.web.bind.annotation.RequestMethod; 
-import org.springframework.web.bind.annotation.RequestParam; 
-import org.springframework.web.bind.annotation.RequestBody; 
+import com.bettermusic.connessioni.model.Connessione;
+import com.bettermusic.connessioni.service.ConnessioniService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.*; 
-import java.util.stream.*; 
-
-import java.util.logging.Logger; 
+import java.util.Collection;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/connessioni")
 public class ConnessioniController {
 
-	@Autowired 
-	private ConnessioniService connessioniService; 
+    @Autowired
+    private ConnessioniService service;
 
     private final Logger logger = Logger.getLogger(this.getClass().toString());
 
-	/* Crea una nuova connessione. */ 
-	@PostMapping("/connessioni")
-	public ConnessioneResponse createConnessione(@RequestBody CreateConnessioneRequest request) {
-		String utente = request.getUtente();
-		String seguito = request.getSeguito();
-		String ruolo = request.getRuolo();
-		logger.info("REST CALL: createConnessione " + utente + ", " + seguito + ", " + ruolo); 
-		Connessione connessione = connessioniService.createConnessione(utente, seguito, ruolo);
-		if (connessione!=null) {
-			ConnessioneResponse response = toConnessioneResponse(connessione); 
-			logger.info("REST CALL: createConnessione " + utente + ", " + seguito + ", " + ruolo + " --> " + response); 
-			return response; 
-		} else {
-			logger.info("REST CALL: createConnessione " + utente + ", " + seguito + ", " + ruolo + " --> NOT CREATED"); 
-			throw new ResponseStatusException(
-				HttpStatus.INTERNAL_SERVER_ERROR, "Connessione not created"
-			);
-		}
-	}	
+    @PostMapping
+    public ConnessioneResponse createConnessione(@RequestBody CreateConnessioneRequest request) {
+        logger.info("REST CALL: createConnessione " + request);
+        Connessione c = service.creaConnessione(request.getUtente(), request.getSeguito(), request.getRuolo());
+        if (c == null) {
+            logger.warning("Connessione not created: " + request);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Connessione not created");
+        }
+        ConnessioneResponse response = toResponse(c);
+        logger.info("Connessione created: " + response);
+        return response;
+    }
 
-	/* Trova tutte le connessioni. */ 
-	@GetMapping("/connessioni")
-	public Collection<ConnessioneResponse> getConnessioni() {
-		Collection<Connessione> connessioni = null; 
-		logger.info("REST CALL: getConnessioni"); 
-		connessioni = connessioniService.getConnessioni();
-		Collection<ConnessioneResponse> response = toConnessioniResponse(connessioni);
-		logger.info("REST CALL: getConnessioni --> " + response); 
-		return response;
-	}
+    @GetMapping
+    public Collection<ConnessioneResponse> getConnessioni() {
+        logger.info("REST CALL: getConnessioni");
+        return service.getConnessioni()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 
-	/* Trova tutte le connessioni di un utente. */ 
-	@GetMapping("/connessioni/{utente}")
-	public Collection<ConnessioneResponse> getConnessioniByUtente(@PathVariable String utente) {
-		Collection<Connessione> connessioni = null; 
-		logger.info("REST CALL: getConnessioniByUtente " + utente); 
-		connessioni = connessioniService.getConnessioniByUtente(utente);
-		Collection<ConnessioneResponse> response = toConnessioniResponse(connessioni);
-		logger.info("REST CALL: getConnessioniByUtente " + utente + " --> " + response); 
-		return response;
-	}
+    
+    @GetMapping("/{utente}")
+    public Collection<ConnessioneResponse> getConnessioniByUtente(@PathVariable String utente) {
+        logger.info("REST CALL: getConnessioniByUtente " + utente);
+        return service.getConnessioniByUtente(utente)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 
-	/* Trova tutte le connessioni di un utente con un certo ruolo. */ 
-	@GetMapping("/connessioni/{utente}/{ruolo}")
-	public Collection<ConnessioneResponse> getConnessioniByUtenteAndRuolo(@PathVariable String utente, @PathVariable String ruolo) {
-		Collection<Connessione> connessioni = null; 
-		logger.info("REST CALL: getConnessioniByUtenteAndRuolo " + utente + " " + ruolo); 
-		connessioni = connessioniService.getConnessioniByUtenteAndRuolo(utente, ruolo);
-		Collection<ConnessioneResponse> response = toConnessioniResponse(connessioni);
-		logger.info("REST CALL: getConnessioniByUtenteAndRuolo " + utente + " " + ruolo + " --> " + response); 
-		return response;
-	}
+    
+    @GetMapping("/{utente}/{ruolo}")
+    public Collection<ConnessioneResponse> getConnessioniByUtenteAndRuolo(@PathVariable String utente, @PathVariable String ruolo) {
+        logger.info("REST CALL: getConnessioniByUtenteAndRuolo " + utente + ", " + ruolo);
+        return service.getConnessioniByUtenteAndRuolo(utente, ruolo)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 
-	/* Cancella una connessione. */ 
-	@DeleteMapping("/connessioni")
-	public ConnessioneResponse deleteConnessione(@RequestBody DeleteConnessioneRequest request) {
-		String utente = request.getUtente();
-		String seguito = request.getSeguito();
-		String ruolo = request.getRuolo();
-		logger.info("REST CALL: deleteConnessione " + utente + ", " + seguito + ", " + ruolo); 
-		Connessione connessione = connessioniService.deleteConnessione(utente, seguito, ruolo);
-		if (connessione!=null) {
-			ConnessioneResponse response = toConnessioneResponse(connessione); 
-			logger.info("REST CALL: deleteConnessione " + utente + ", " + seguito + ", " + ruolo + " --> " + response + " *** DELETED ***"); 
-			return response; 
-		} else {
-			logger.info("REST CALL: deleteConnessione " + utente + ", " + seguito + ", " + ruolo + " --> NOT DELETED"); 
-			throw new ResponseStatusException(
-				HttpStatus.INTERNAL_SERVER_ERROR, "Connessione not deleted"
-			);
-		}
-	}	
+    
+    @DeleteMapping("/{id}")
+    public ConnessioneResponse deleteConnessioneById(@PathVariable String id) {
+        logger.info("REST CALL: deleteConnessioneById " + id);
+        Connessione c = service.cancellaConnessione(id) ? new Connessione(id) : null;
+        if (c == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Connessione not found");
+        }
+        return toResponse(c);
+    }
 
-	/* Converte una connessione in una risposta connessione. */ 
-	private ConnessioneResponse toConnessioneResponse(Connessione connessione) {
-		ConnessioneResponse response = null; 
-		if (connessione!=null) {
-			response = new ConnessioneResponse(connessione.getId(), connessione.getUtente(), 
-					connessione.getSeguito(), connessione.getRuolo());
-		} 
-		return response; 
-	}
+    
+    @DeleteMapping
+    public ConnessioneResponse deleteConnessione(@RequestBody DeleteConnessioneRequest request) {
+        logger.info("REST CALL: deleteConnessione " + request);
+        Connessione c = service.deleteConnessione(request.getUtente(), request.getSeguito(), request.getRuolo());
+        if (c == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Connessione not deleted");
+        }
+        return toResponse(c);
+    }
 
-	/* Converte una collezione di connessioni in una collezione di risposte connessione. */ 
-	private Collection<ConnessioneResponse> toConnessioniResponse(Collection<Connessione> connessioni) {
-		Collection<ConnessioneResponse> response = 
-			connessioni
-				.stream()
-				.map(c -> toConnessioneResponse(c))
-				.collect(Collectors.toList());
-		return response; 
-	}
-
+    
+    private ConnessioneResponse toResponse(Connessione c) {
+        return new ConnessioneResponse(c.getId(), c.getUtente(), c.getSeguito(), c.getRuolo());
+    }
 }

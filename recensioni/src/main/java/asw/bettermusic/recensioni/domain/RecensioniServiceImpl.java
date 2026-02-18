@@ -3,6 +3,9 @@ package asw.bettermusic.recensioni.domain;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import asw.bettermusic.recensioni.api.event.RecensioneCreatedEvent;
+import asw.bettermusic.common.api.event.DomainEvent;
+
 import java.util.*; 
 
 @Service
@@ -17,20 +20,30 @@ public class RecensioniServiceImpl implements RecensioniService {
 	@Autowired
 	private AlbumRepository albumRepository;
 
+	@Autowired
+	private RecensioniEventPublisher recensioniEventPublisher;
+
 	/* Crea una nuova recensione, a partire dai suoi dati. */ 
  	public Recensione createRecensione(String recensore, String titoloAlbum, String artistaAlbum, String testo, String sunto) {
 	//	Album album = albumClient.getAlbum(titoloAlbum, artistaAlbum);
 		//Album album= albumRepository.findByTitoloAndArtista(titoloAlbum, artistaAlbum).orElseThrow(()-> new RuntimeException("Album not found"));
 		Optional<Album> optAlbum = albumRepository.findByTitoloAndArtista(titoloAlbum, artistaAlbum);
-		if (optAlbum.isEmpty()) {
+		if (optAlbum.isEmpty()) {		// TODO: sistema e metti un eccezione più specifica
 			throw new RuntimeException("Album not found in Recensioni: " + titoloAlbum + " / " + artistaAlbum);
 		}
 		Album album = optAlbum.get();
 		Recensione recensione = new Recensione(recensore, album.getId(),  testo, sunto); 
-		recensione = recensioniRepository.save(recensione);
-		return recensione;
+		
+		try{
+			recensione = recensioniRepository.save(recensione);
+			DomainEvent event= new RecensioneCreatedEvent(recensione.getId(), recensione.getRecensore(), recensione.getIdAlbum(), recensione.getTesto(), recensione.getSunto());
+			recensioniEventPublisher.publish(event);
 
-		//qui andrà la parte di EventPublish di Recensione per il servizio Recensioni-Seguite
+			return recensione;
+		}catch (Exception e){		// TODO: metti un eccezione più specifica
+			logger.info("DataAccessException:" + e.toString());
+			return null; 
+		}
 	}
 
 	/* Trova una recensione, dato l'id. */ 

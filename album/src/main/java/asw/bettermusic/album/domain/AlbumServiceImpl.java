@@ -31,7 +31,7 @@ public class AlbumServiceImpl implements AlbumService {
         	albumEventPublisher.publish(event);
 
 			return album;
-		} catch(Exception e) {
+		} catch(Exception e) {		// TODO: metti un eccezione più specifica
 			/* si potrebbe verificare un'eccezione se è violato il vincolo di unicità dell'album */ 
 			logger.info("DataAccessException:" + e.toString());
 			return null; 

@@ -8,5 +8,7 @@ include 'connessioni-api'
 include 'recensioni-seguite'
 include 'recensioni-seguite-api'
 include 'api-gateway'
+include 'recensioni-api-event'
+include 'album-api-event'
 
 rootProject.name = 'asw-bettermusic'

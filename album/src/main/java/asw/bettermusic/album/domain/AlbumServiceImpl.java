@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 import asw.bettermusic.album.api.event.AlbumCreatedEvent;
 import asw.bettermusic.common.api.event.DomainEvent;
 
+import java.util.logging.Logger;
+
 @Service
 public class AlbumServiceImpl implements AlbumService {
+
+	private final Logger logger = Logger.getLogger(this.getClass().toString());
 
 	@Autowired
 	private AlbumRepository albumRepository;
@@ -29,6 +33,7 @@ public class AlbumServiceImpl implements AlbumService {
 			return album;
 		} catch(Exception e) {
 			/* si potrebbe verificare un'eccezione se è violato il vincolo di unicità dell'album */ 
+			logger.info("DataAccessException:" + e.toString());
 			return null; 
 		}
 	}

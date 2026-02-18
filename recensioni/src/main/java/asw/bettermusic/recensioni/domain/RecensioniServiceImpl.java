@@ -11,15 +11,26 @@ public class RecensioniServiceImpl implements RecensioniService {
 	@Autowired
 	private RecensioniRepository recensioniRepository;
 
+//	@Autowired
+//	private AlbumClientPort albumClient;
+
 	@Autowired
-	private AlbumClientPort albumClient;
+	private AlbumRepository albumRepository;
 
 	/* Crea una nuova recensione, a partire dai suoi dati. */ 
  	public Recensione createRecensione(String recensore, String titoloAlbum, String artistaAlbum, String testo, String sunto) {
-		Album album = albumClient.getAlbum(titoloAlbum, artistaAlbum);
+	//	Album album = albumClient.getAlbum(titoloAlbum, artistaAlbum);
+		//Album album= albumRepository.findByTitoloAndArtista(titoloAlbum, artistaAlbum).orElseThrow(()-> new RuntimeException("Album not found"));
+		Optional<Album> optAlbum = albumRepository.findByTitoloAndArtista(titoloAlbum, artistaAlbum);
+		if (optAlbum.isEmpty()) {
+			throw new RuntimeException("Album not found in Recensioni: " + titoloAlbum + " / " + artistaAlbum);
+		}
+		Album album = optAlbum.get();
 		Recensione recensione = new Recensione(recensore, album.getId(),  testo, sunto); 
 		recensione = recensioniRepository.save(recensione);
 		return recensione;
+
+		//qui andrà la parte di EventPublish di Recensione per il servizio Recensioni-Seguite
 	}
 
 	/* Trova una recensione, dato l'id. */ 

@@ -9,7 +9,6 @@ dependencies {
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   runtimeOnly 'org.postgresql:postgresql'
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 jar {

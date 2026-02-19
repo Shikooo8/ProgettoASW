@@ -4,6 +4,7 @@ import asw.bettermusic.common.api.event.DomainEvent;
 import asw.bettermusic.recensioni.api.event.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*; 
 
@@ -32,7 +33,7 @@ public class RecensioniEventConsumerService{
     public void handleRecensioneCreatedEvent(RecensioneCreatedEvent e){
         Recensione recensione= new Recensione(e.getId(), e.getRecensore(), e.getIdAlbum(), e.getSunto());
 
-        recensioneRepository.save(recensione);         
+        recensioniRepository.save(recensione);         
 
         logger.info("RECENSIONE SAVED: " + recensione.toString());
     }

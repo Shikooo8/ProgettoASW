@@ -4,6 +4,8 @@ import asw.bettermusic.common.api.event.DomainEvent;
 import asw.bettermusic.connessioni.api.event.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.util.*; 
 
@@ -35,7 +37,7 @@ public class ConnessioniEventConsumerService{
     public void handleConnessioneCreatedEvent(ConnessioneCreatedEvent e){
         Connessione connessione= new Connessione(e.getId(), e.getUtente(), e.getSeguito(), e.getRuolo());
 
-        connessioneRepository.save(connessione);         
+        connessioniRepository.save(connessione);         
 
         logger.info("CONNESSIONE SAVED: " + connessione.toString());
 
@@ -45,7 +47,7 @@ public class ConnessioniEventConsumerService{
         Connessione connessione= new Connessione(e.getId(), e.getUtente(), e.getSeguito(), e.getRuolo());
     //    Long idConnessione= e.getId();
 
-        connessioneRepository.delete(connessione);         
+        connessioniRepository.delete(connessione);         
 
         logger.info("CONNESSIONE DELETED: " + connessione.toString());
 

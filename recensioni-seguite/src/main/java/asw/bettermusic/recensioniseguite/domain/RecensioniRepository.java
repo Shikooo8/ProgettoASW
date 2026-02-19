@@ -1,4 +1,4 @@
-package asw.bettermusic.recensioni.domain;
+package asw.bettermusic.recensioniseguite.domain;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,0 +1,71 @@
+services:
+  # Album
+  album:
+    build: ./album
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - album_network
+      - service-network
+
+  # Recensioni
+  recensioni:
+    build: ./recensioni
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - recensioni_network
+      - service-network
+
+  # Connessioni
+  connessioni:
+    build: ./connessioni
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - connessioni_network
+      - service-network
+
+  # Recensioni Seguite
+  recensioni-seguite:
+    build: ./recensioni-seguite
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - recensioni-seguite_network
+      - service-network
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: bettermusic-api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - album
+      - recensioni
+      - connessioni
+      - recensioni-seguite
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    external: true
+    name: bettermusic_service-network
+  album_network:
+    external: true
+    name: album_db-network
+  connessioni_network:
+    external: true
+    name: connessioni_db-network
+  recensioni_network:
+    external: true
+    name: recensioni_db-network
+  recensioni-seguite_network:
+    external: true
+    name: recensioni-seguite_db-network

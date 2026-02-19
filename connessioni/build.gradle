@@ -17,6 +17,7 @@ configurations {
 
 dependencies {
   implementation project(':connessioni-api')
+  runtimeOnly 'org.postgresql:postgresql'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.cloud:spring-cloud-starter'

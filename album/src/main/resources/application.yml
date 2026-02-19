@@ -1,8 +1,30 @@
-# application.yml
---- 
-spring: 
-  application: 
+spring:
+  application:
     name: album
+  
+  datasource:
+    # L'host 'album-db' viene usato quando il DB gira in un container separato [cite: 1541, 1550]
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/album_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update # Crea le tabelle automaticamente se non esistono
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    #    bootstrap-servers: "localhost:9092"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Usa JSON per l'interscambio di messaggi [cite: 1208-1210]
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
   cloud:
     consul:
       host: localhost
@@ -11,20 +33,11 @@ spring:
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
         healthCheckPath: /actuator/health
         healthCheckInterval: 10s
-        # configurazione per effettuare esprimenti, NON USARE UN PRODUZIONE 
-        # dopo quanto tempo consul deve smettere di restituire servizi che non rispondono all'health check? 
         healthCheckCriticalTimeout: 45s
-        # consul deve restituire solo servizi che passano l'health check (default=false) 
-        queryPassing: true 
-    loadbalancer: 
-      ribbon.enabled: false 
+        queryPassing: true
+      loadbalancer:
+        ribbon.enabled: false 
 
-  kafka:
-    bootstrap-servers: "localhost:9092"
-    #potrebbe essere kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}

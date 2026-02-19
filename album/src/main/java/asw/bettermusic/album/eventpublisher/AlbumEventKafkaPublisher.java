@@ -1,16 +1,14 @@
 package asw.bettermusic.album.eventpublisher; // Deve stare fuori dal domain [cite: 1546]
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.kafka.core.KafkaTemplate; 
+import java.util.logging.Logger;
 
-import asw.bettermusic.album.domain.AlbumEventPublisher;
-import asw.bettermusic.common.api.event.DomainEvent; 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
 import asw.bettermusic.album.api.event.AlbumServiceEventChannel;
-
-import java.util.logging.Logger;
+import asw.bettermusic.album.domain.AlbumEventPublisher;
+import asw.bettermusic.common.api.event.DomainEvent;
 
 
 @Component

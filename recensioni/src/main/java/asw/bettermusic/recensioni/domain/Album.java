@@ -11,7 +11,7 @@ import java.util.*;
 @Table(name="albums")
 //(uniqueConstraints = { @UniqueConstraint(name = "UniqueTitoloArtista", columnNames = { "titolo", "artista" }) })
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Album implements {
+public class Album {
 
 	/* id dell'album */ 
 	//	@EqualsAndHashCode.Include

@@ -1,6 +1,23 @@
 package com.bettermusic.connessioni.api.event;
 
-public class ConnessionCreatedEvent {
+import asw.bettermusic.common.api.event.DomainEvent;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data @NoArgsConstructor @AllArgsConstructor
+public class ConnessioneCreatedEvent implements DomainEvent{
+
+    private Long id;
+
+    private String utente;
+
+    private String seguito;
+
+    private String ruolo;
+
+
+/*    
     private String connessioneId;
     private String userId;
     private String targetId;
@@ -14,4 +31,5 @@ public class ConnessionCreatedEvent {
     public String getConnessioneId() { return connessioneId; }
     public String getUserId() { return userId; }
     public String getTargetId() { return targetId; }
+*/
 }

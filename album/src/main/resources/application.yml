@@ -19,6 +19,13 @@ spring:
     loadbalancer: 
       ribbon.enabled: false 
 
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    #potrebbe essere kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 server: 
   port: ${PORT:${SERVER_PORT:0}}
 #  port: 8080
@@ -30,6 +37,6 @@ server:
 # disable OSIV
 spring.jpa.open-in-view: false
 
-asw.kafka.channel.out=album-created-topic
+#asw.kafka.channel.out=album-created-topic
 # Configura anche i serializer per inviare oggetti JSON [cite: 1208-1210]
-spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+#spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer

@@ -1,32 +1,30 @@
-package asw.bettermusic.album.eventpublisher; // Deve stare fuori dal domain [cite: 1546]
+package asw.bettermusic.recensioni.eventpublisher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.kafka.core.KafkaTemplate; 
+import org.springframework.kafka.core.KafkaTemplate;
 
-import asw.bettermusic.album.domain.AlbumEventPublisher;
+import asw.bettermusic.recensioni.domain.RecensioniEventPublisher;
 import asw.bettermusic.common.api.event.DomainEvent; 
 
-import asw.bettermusic.album.api.event.AlbumServiceEventChannel;
+import asw.bettermusic.recensioni.api.event.RecensioniServiceEventChannel;
 
 import java.util.logging.Logger;
 
-
 @Component
-public class AlbumEventKafkaPublisher implements AlbumEventPublisher {
+public class RecensioniEventKafkaPublisher implements RecensioniEventPublisher {
 
     private final Logger logger = Logger.getLogger(this.getClass().toString());
     
     @Autowired 
     private KafkaTemplate<String, DomainEvent> template; 
 
-//    @Value("${asw.kafka.channel.out}") // Legge il topic da application.properties [cite: 345, 348]
-    private String channel= AlbumServiceEventChannel.channel; 
+    private String channel= RecensioniServiceEventChannel.channel; 
 
     @Override
     public void publish(DomainEvent event) {
         logger.info("EVENT PUBLISHER: " + event.toString() + " ON CHANNEL: " + channel);
-        template.send(channel, event); // Invio reale a Kafka [cite: 351, 1029]
+        template.send(channel, event);
     }
 }

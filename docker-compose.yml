@@ -9,6 +9,55 @@ services:
     networks:
       - service-network
 
+  album-db:
+    image: postgres:16-alpine
+    container_name: album-db
+    environment:
+      POSTGRES_DB: album_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - album_db_data:/var/lib/postgresql/data
+
+
+  recensioni-db:
+    image: postgres:15
+    container_name: recensioni-db
+    environment:
+      POSTGRES_DB: recensioni_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  connessioni-db:
+    image: postgres:15
+    container_name: connessioni-db
+    environment:
+      POSTGRES_DB: connessioni_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+
+
+  recensioniseguite-db:
+    image: postgres:15
+    container_name: recensioniseguite-db
+    environment:
+      POSTGRES_DB: recensioniseguite_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+# Definizione dei volumi per non perdere i dati al riavvio
+volumes:
+  album_db_data:
+
 networks:
   service-network:
     driver: bridge

@@ -1,16 +1,21 @@
 #!/bin/bash
 
-# 1. Compilazione di tutti i moduli (Java SDK e Gradle)
+#Compilazione di tutti i moduli (Java SDK e Gradle)
 source build-all.sh
 
-# 2. Avvio Infrastruttura (Consul, Kafka e i 4 Database separati) [cite: 105, 124, 129]
-# È più pulito usare docker-compose per gestire i 4 database richiesti [cite: 140]
-docker compose up -d consul kafka album-db recensioni-db connessioni-db seguite-db
+# Avvio Infrastruttura (Consul, Kafka e i 4 Database separati)
 
-# 3. Attesa tecnica 
-# I database e Kafka devono essere pronti prima che le app si connettano [cite: 142]
+source start-consul.sh
+cd kafka/docker
+source start-kafka.sh
+cd ../..
+# È più pulito usare docker-compose per gestire i 4 database richiesti
+docker compose up -d album-db recensioni-db connessioni-db recensioniseguite-db
+
+#  Attesa tecnica 
+# I database e Kafka devono essere pronti prima che le app si connettano
 echo "Attendendo che i database e Kafka siano pronti..."
 sleep 30
 
-# 4. Avvio dei Microservizi (Esecuzione dei file .jar)
+# Avvio dei Microservizi (Esecuzione dei file .jar)
 source start-bettermusic.sh

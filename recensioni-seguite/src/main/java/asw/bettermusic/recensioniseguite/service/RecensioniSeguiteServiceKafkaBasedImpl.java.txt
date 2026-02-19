@@ -1,0 +1,45 @@
+package asw.bettermusic.recensioniseguite.service;
+
+import asw.bettermusic.recensioniseguite.domain.ConnessioneView;
+import asw.bettermusic.recensioniseguite.domain.RecensioneView;
+import asw.bettermusic.recensioniseguite.repository.ConnessioneViewRepository;
+import asw.bettermusic.recensioniseguite.repository.RecensioneViewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public class RecensioniSeguiteServiceKafkaBasedImpl implements RecensioniSeguiteService {
+
+    @Autowired
+    private RecensioneViewRepository recensioneViewRepository;
+
+    @Autowired
+    private ConnessioneViewRepository connessioneViewRepository;
+
+    @Override
+    public List<RecensioneView> getRecensioniSeguite(String utente) {
+
+        
+        List<ConnessioneView> connessioni = connessioneViewRepository.findAll();
+
+        Set<String> utentiSeguiti = new HashSet<>();
+        for (ConnessioneView c : connessioni) {
+            if (c.getFollower().equals(utente)) {
+                utentiSeguiti.add(c.getSeguito());
+            }
+        }
+
+        List<RecensioneView> recensioni = recensioneViewRepository.findAll();
+
+        List<RecensioneView> risultato = new ArrayList<>();
+        for (RecensioneView r : recensioni) {
+            if (utentiSeguiti.contains(r.getAutore())) {
+                risultato.add(r);
+            }
+        }
+
+        return risultato;
+    }
+}

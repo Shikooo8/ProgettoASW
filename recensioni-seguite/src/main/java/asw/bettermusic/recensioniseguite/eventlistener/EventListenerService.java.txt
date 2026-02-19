@@ -10,33 +10,54 @@ public class EventListenerService {
     @Autowired
     private ConnessioneViewRepository connessioneRepo;
 
-    // Album creato
-    @KafkaListener(topics = "album", groupId = "recensioni-seguite-group")
-    public void handleAlbumCreated(AlbumCreatedEvent event) {
-        AlbumView album = new AlbumView();
-        album.setId(event.getId());
-        album.setTitolo(event.getTitolo());
-        album.setArtista(event.getArtista());
-        album.setGeneri(event.getGeneri());
+    @KafkaListener(topics = {
+        "album-service-event-channel",
+        "recensione-service-event-channel",
+        "connessioni-service-event-channel"
+    }, groupId = "recensioni-seguite-group")
+    public void handleEvent(Object event) {
+        // Album creato
+        if (event instanceof AlbumCreatedEvent) {
+            AlbumCreatedEvent albumEvent = (AlbumCreatedEvent) event;
+            AlbumView album = new AlbumView();
+            album.setId(albumEvent.getId());
+            album.setTitolo(albumEvent.getTitolo());
+            album.setArtista(albumEvent.getArtista());
+            album.setGeneri(albumEvent.getGeneri());
+            albumRepo.save(album);
+        }
 
-        albumRepo.save(album);
-    }
+        // Recensione creata
+        else if (event instanceof RecensioneCreatedEvent) {
+            RecensioneCreatedEvent recEvent = (RecensioneCreatedEvent) event;
+            RecensioneView r = new RecensioneView();
+            r.setId(recEvent.getId());
+            r.setAlbumId(recEvent.getAlbumId());
+            r.setAutore(recEvent.getAutore());
+            r.setContenuto(recEvent.getContenuto());
+            recensioneRepo.save(r);
+        }
 
-    // Recensione creata
-    @KafkaListener(topics = "recensioni", groupId = "recensioni-seguite-group")
-    public void handleRecensioneCreated(RecensioneCreatedEvent event) {
-        RecensioneView r = new RecensioneView();
-        r.setId(event.getId());
-        r.setAlbumId(event.getAlbumId());
-        r.setAutore(event.getAutore());
-        r.setContenuto(event.getContenuto());
+        // Connessione creata
+        else if (event instanceof ConnessioneCreatedEvent) {
+            ConnessioneCreatedEvent connEvent = (ConnessioneCreatedEvent) event;
+            ConnessioneView c = new ConnessioneView();
+            c.setId(connEvent.getId());
+            c.setUtente(connEvent.getUtente());
+            c.setSeguito(connEvent.getSeguito());
+            c.setRuolo(connEvent.getRuolo());
+            connessioneRepo.save(c);
+        }
 
-        recensioneRepo.save(r);
-    }
+        // Connessione eliminata
+        else if (event instanceof ConnessioneDeletedEvent) {
+            ConnessioneDeletedEvent delEvent = (ConnessioneDeletedEvent) event;
+            connessioneRepo.deleteById(delEvent.getId());
+        }
 
-    // Connessione eliminata
-    @KafkaListener(topics = "connessioni", groupId = "recensioni-seguite-group")
-    public void handleConnessioneDeleted(ConnessioneDeletedEvent event) {
-        connessioneRepo.deleteById(event.getId());
+        // Eventi non gestiti
+        else {
+            System.out.println("Evento non gestito: " + event.getClass().getSimpleName());
+        }
     }
 }

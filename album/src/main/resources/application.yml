@@ -34,12 +34,10 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 10s
         healthCheckCriticalTimeout: 45s
-        queryPassing: true 
+        queryPassing: true
+      loadbalancer:
+        ribbon.enabled: false 
 
-asw:
-  kafka:
-    channel:
-      [cite_start]out: album-service-event-channel # Il topic per gli eventi [cite: 999]
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}

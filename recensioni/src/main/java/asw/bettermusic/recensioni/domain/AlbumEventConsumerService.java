@@ -4,6 +4,7 @@ import asw.bettermusic.common.api.event.DomainEvent;
 import asw.bettermusic.album.api.event.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*; 
 

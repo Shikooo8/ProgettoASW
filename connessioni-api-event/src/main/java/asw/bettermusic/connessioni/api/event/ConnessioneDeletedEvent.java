@@ -1,4 +1,4 @@
-package com.bettermusic.connessioni.api.event;
+package asw.bettermusic.connessioni.api.event;
 
 import asw.bettermusic.common.api.event.DomainEvent;
 import lombok.AllArgsConstructor;

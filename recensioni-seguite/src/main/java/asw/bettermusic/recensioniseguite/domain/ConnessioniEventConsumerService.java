@@ -42,12 +42,12 @@ public class ConnessioniEventConsumerService{
     }
 
     public void handleConnessioneDeletedEvent(ConnessioneDeletedEvent e){
-//        Connessione connessione= new Connessione(e.getId(), e.getUtente(), e.getSeguito(), e.getRuolo());
-        Long idConnessione= e.getId();
+        Connessione connessione= new Connessione(e.getId(), e.getUtente(), e.getSeguito(), e.getRuolo());
+    //    Long idConnessione= e.getId();
 
-        connessioneRepository.deletedById(idConnessione);         
+        connessioneRepository.delete(connessione);         
 
-        logger.info("CONNESSIONE DELETED (id: " + idConnessione + ")" );
+        logger.info("CONNESSIONE DELETED: " + connessione.toString());
 
     }
     

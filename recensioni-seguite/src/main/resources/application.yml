@@ -44,5 +44,5 @@ server:
 
 asw:
   recensioniseguiteservice:
-    implementation: RecensioniSeguiteServiceRestBasedImpl
+    implementation: RecensioniSeguiteServiceKafkaBasedImpl
     # implementation alternativa: RecensioniSeguiteServiceKafkaBasedImpl

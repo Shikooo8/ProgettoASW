@@ -20,7 +20,7 @@ public class Album {
 	/* artista dell'album */ 
 	private String artista; 
 	/* generi dell'album */ 
-	@ElementCollection( fetch = FetchType.LAZY)		//DA VEDERE (lazy o eager?-> specifiche prof)
+	@ElementCollection( fetch = FetchType.EAGER)		//DA VEDERE (lazy o eager?-> specifiche prof)
 	private Set<String> generi; 
 	
 }

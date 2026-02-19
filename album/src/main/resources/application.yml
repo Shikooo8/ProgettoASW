@@ -19,6 +19,7 @@ spring:
 
   kafka:
     bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    #    bootstrap-servers: "localhost:9092"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       # Usa JSON per l'interscambio di messaggi [cite: 1208-1210]
@@ -39,13 +40,6 @@ asw:
   kafka:
     channel:
       [cite_start]out: album-service-event-channel # Il topic per gli eventi [cite: 999]
-
-  kafka:
-    bootstrap-servers: "localhost:9092"
-    #potrebbe essere kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server: 
   port: ${PORT:${SERVER_PORT:0}}

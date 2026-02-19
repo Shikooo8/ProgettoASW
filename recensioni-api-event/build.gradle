@@ -5,11 +5,11 @@ configurations {
 }
 
 dependencies {
-  // serve il numero di versione perché non è un progetto Spring Boot 
+  
+  implementation project(':bettermusic-common-api-event')
+
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-  runtimeOnly 'org.postgresql:postgresql'
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 jar {

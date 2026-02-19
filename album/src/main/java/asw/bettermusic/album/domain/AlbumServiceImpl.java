@@ -2,14 +2,13 @@ package asw.bettermusic.album.domain;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.stereotype.Service;
 
 import asw.bettermusic.album.api.event.AlbumCreatedEvent;
 import asw.bettermusic.common.api.event.DomainEvent;
-
-import java.util.logging.Logger;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {

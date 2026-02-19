@@ -19,7 +19,7 @@ services:
       - album_db_data:/var/lib/postgresql/data
 
 
-    recensioni-db:
+  recensioni-db:
     image: postgres:15
     container_name: recensioni-db
     environment:
@@ -29,11 +29,23 @@ services:
     ports:
       - "5432:5432"
 
-    connessioni-db:
+  connessioni-db:
     image: postgres:15
     container_name: connessioni-db
     environment:
       POSTGRES_DB: connessioni_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+
+
+  recensioniseguite-db:
+    image: postgres:15
+    container_name: recensioniseguite-db
+    environment:
+      POSTGRES_DB: recensioniseguite_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:

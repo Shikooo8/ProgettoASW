@@ -17,26 +17,26 @@ spring:
       ribbon:
         enabled: false
 
-  datasource:
-    url: jdbc:h2:mem:recensioniseguitedb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#  datasource:
+#    url: jdbc:h2:mem:recensioniseguitedb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
 
   jpa:
-    hibernate:
-      ddl-auto: update
+#    hibernate:
+#      ddl-auto: update
     open-in-view: false # disabilita OSIV, evita problemi con lazy loading
 
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: recensioni-seguite-group
+      group-id:  ${spring.application.name}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "*" # in produzione meglio specificare i package fidati
+        spring.json.trusted.packages: asw.bettermusic.* 
 
 server:
   port: ${PORT:${SERVER_PORT:0}} # dinamico, prende PORT o SERVER_PORT o porta casuale

@@ -1,37 +1,48 @@
-# application.yml 
---- 
-spring: 
-  application: 
+---
+spring:
+  application:
     name: recensioni-seguite
+
   cloud:
     consul:
       host: localhost
       port: 8500
-      discovery: 
+      discovery:
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
         healthCheckPath: /actuator/health
         healthCheckInterval: 10s
-        # configurazione per effettuare esprimenti, NON USARE UN PRODUZIONE 
-        # dopo quanto tempo consul deve smettere di restituire servizi che non rispondono all'health check? 
         healthCheckCriticalTimeout: 45s
-        # consul deve restituire solo servizi che passano l'health check (default=false) 
-        queryPassing: true 
-    loadbalancer: 
-      ribbon.enabled: false 
+        queryPassing: true
+    loadbalancer:
+      ribbon:
+        enabled: false
 
-server: 
-  port: ${PORT:${SERVER_PORT:0}}
-#  port: 8080
-  # per swagger, se dietro a un api gateway 
-  forward-headers-strategy: framework
+  datasource:
+    url: jdbc:h2:mem:recensioniseguitedb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
-# fa il logging dei comandi sql eseguiti 
-#spring.jpa.show-sql: true
-# disable OSIV
-spring.jpa.open-in-view: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false # disabilita OSIV, evita problemi con lazy loading
 
-# ASW 
-asw: 
-  recensioniseguiteservice: 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: recensioni-seguite-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*" # in produzione meglio specificare i package fidati
+
+server:
+  port: ${PORT:${SERVER_PORT:0}} # dinamico, prende PORT o SERVER_PORT o porta casuale
+  forward-headers-strategy: framework # utile dietro API Gateway
+
+asw:
+  recensioniseguiteservice:
     implementation: RecensioniSeguiteServiceRestBasedImpl
-    # implementation: RecensioniSeguiteServiceKafkaBasedImpl
+    # implementation alternativa: RecensioniSeguiteServiceKafkaBasedImpl

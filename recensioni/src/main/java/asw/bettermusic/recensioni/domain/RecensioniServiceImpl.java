@@ -8,8 +8,12 @@ import asw.bettermusic.common.api.event.DomainEvent;
 
 import java.util.*; 
 
+import java.util.logging.Logger; 
+
+
 @Service
 public class RecensioniServiceImpl implements RecensioniService {
+	private final Logger logger = Logger.getLogger(this.getClass().toString());
 
 	@Autowired
 	private RecensioniRepository recensioniRepository;

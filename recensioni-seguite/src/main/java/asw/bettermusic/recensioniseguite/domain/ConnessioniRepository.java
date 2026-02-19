@@ -1,6 +1,7 @@
-package asw.bettermusic.connessioni.domain;
+package asw.bettermusic.recensioniseguite.domain;
 
 import org.springframework.data.repository.CrudRepository;
+
 
 import java.util.*; 
 

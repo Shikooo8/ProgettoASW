@@ -1,7 +1,7 @@
 package asw.bettermusic.connessioni.domain;
 
-import asw.bettermusic.connessioni.api.event.ConnessionCreatedEvent;
-import asw.bettermusic.connessioni.api.event.ConnessionDeletedEvent;
+import asw.bettermusic.connessioni.api.event.ConnessioneCreatedEvent;
+import asw.bettermusic.connessioni.api.event.ConnessioneDeletedEvent;
 import asw.bettermusic.common.api.event.DomainEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ConnessioniServiceImpl implements ConnessioniService {
             return connessione;
         }
         catch(Exception e){ // TODO: metti un eccezione più specifica
-            ogger.info("DataAccessException:" + e.toString());
+            logger.info("DataAccessException:" + e.toString());
 			return null; 
         }
         
@@ -82,14 +82,14 @@ public class ConnessioniServiceImpl implements ConnessioniService {
         Connessione connessione = getConnessione(utente, seguito, ruolo);
         if (connessione != null) {
             try{
-                connessione = connessioniRepository.delete(connessione);
+                connessioniRepository.delete(connessione);
                 DomainEvent event = new ConnessioneDeletedEvent(connessione.getId(), connessione.getUtente(), connessione.getSeguito(), connessione.getRuolo());
                 connessioniEventPublisher.publish(event);
 
                 return connessione;
             }
             catch(Exception e){ // TODO: metti un eccezione più specifica
-                ogger.info("DataAccessException:" + e.toString());
+                logger.info("DataAccessException:" + e.toString());
                 return null; 
             }
         }

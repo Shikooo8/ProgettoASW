@@ -17,6 +17,9 @@ configurations {
 
 dependencies {
   implementation project(':connessioni-api')
+  implementation project(':connessioni-api-event')
+  implementation project(':bettermusic-common-api-event')
+  implementation 'org.springframework.kafka:spring-kafka'
   runtimeOnly 'org.postgresql:postgresql'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'

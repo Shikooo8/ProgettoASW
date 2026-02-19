@@ -1,4 +1,4 @@
-package asw.bettermusic.album.eventpublisher; // Deve stare fuori dal domain [cite: 1546]
+package asw.bettermusic.album.eventpublisher; // Deve stare fuori dal domain 
 
 import java.util.logging.Logger;
 
@@ -19,12 +19,12 @@ public class AlbumEventKafkaPublisher implements AlbumEventPublisher {
     @Autowired 
     private KafkaTemplate<String, DomainEvent> template; 
 
-//    @Value("${asw.kafka.channel.out}") // Legge il topic da application.properties [cite: 345, 348]
+//    @Value("${asw.kafka.channel.out}") // Legge il topic da application.properties
     private String channel= AlbumServiceEventChannel.channel; 
 
     @Override
     public void publish(DomainEvent event) {
         logger.info("EVENT PUBLISHER: " + event.toString() + " ON CHANNEL: " + channel);
-        template.send(channel, event); // Invio reale a Kafka [cite: 351, 1029]
+        template.send(channel, event); // Invio reale a Kafka 
     }
 }

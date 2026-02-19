@@ -1,12 +1,17 @@
 package asw.bettermusic.recensioniseguite.domain;
 
+import jakarta.persistence.*; 
+
 import lombok.*; 
 
 /* Connessione tra un utente e un seguito (con un ruolo). */  
+@Entity 
 @Data @NoArgsConstructor @AllArgsConstructor
+@Table(name="connessioni", uniqueConstraints = { @UniqueConstraint(name = "UniqueUtenteSeguitoRuolo", columnNames = { "utente", "seguito", "ruolo" }) })
 public class Connessione {
 
 	/* id della connessione */ 
+	@Id
 	private Long id; 
 	/* utente che segue */ 
 	private String utente; 

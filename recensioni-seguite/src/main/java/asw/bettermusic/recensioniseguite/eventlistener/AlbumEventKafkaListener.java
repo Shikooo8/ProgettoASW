@@ -1,8 +1,8 @@
-package asw.bettermusic.recensioni.eventlistener;
+package asw.bettermusic.recensioniseguite.eventlistener;
 
 import asw.bettermusic.common.api.event.DomainEvent;
 import asw.bettermusic.album.api.event.*;
-import asw.bettermusic.recensioni.domain.AlbumEventConsumerService;
+import asw.bettermusic.recensioniseguite.domain.AlbumEventConsumerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,14 +19,6 @@ public class AlbumEventKafkaListener{
 
     private final Logger logger = Logger.getLogger(this.getClass().toString());
 
-
-//    @Value("${asw.kafka.channel.in}")       
-//    private String channel;
-    //da qualche parte si dovrebbe riprendere il canale dichiarato in album-api-event
-
-//    @Value("${asw.kafka.groupid}")
-//    private String groupId;
-
     @Autowired
     private AlbumEventConsumerService albumEventConsumerService;
 
@@ -36,7 +28,7 @@ public class AlbumEventKafkaListener{
         logger.info("EVENT LISTENER: " + record.toString());
         DomainEvent event= record.value();
         albumEventConsumerService.onEvent(event);
-        logger.info("AlbumEventKafkaListener-r received event: " + event);
+        logger.info("AlbumEventKafkaListener-rs received event: " + event);
     } 
 
 }

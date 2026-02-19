@@ -11,11 +11,11 @@ public class ConnessioneDeletedEvent implements DomainEvent {
     
     private Long id;            //potrebbe essere necessario anche solo questo!!
 
-    private String utente;
+//    private String utente;
 
-    private String seguito;
+//    private String seguito;
 
-    private String ruolo;
+//    private String ruolo;
 
 /*    
     private String connessioneId;

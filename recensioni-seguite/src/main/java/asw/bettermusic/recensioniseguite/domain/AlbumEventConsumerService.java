@@ -1,4 +1,4 @@
-package asw.bettermusic.recensioni.domain;
+package asw.bettermusic.recensioniseguite.domain;
 
 import asw.bettermusic.common.api.event.DomainEvent;
 import asw.bettermusic.album.api.event.*;
@@ -14,10 +14,6 @@ import java.util.logging.Logger;
 public class AlbumEventConsumerService{
 
     private final Logger logger = Logger.getLogger(this.getClass().toString());
-
-
-//    @Value("${asw.kafka.consumer.name}")
-//    private String consumerName;
 
     @Autowired
     private AlbumRepository albumRepository;

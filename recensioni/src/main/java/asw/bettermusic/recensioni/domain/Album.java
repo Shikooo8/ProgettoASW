@@ -7,9 +7,8 @@ import lombok.*;
 import java.util.*; 
 
 /* Un album. */  
-@Entity 		//Recenzioni memorizzerà una tabella contenente gli album
-@Table(name="albums")
-//(uniqueConstraints = { @UniqueConstraint(name = "UniqueTitoloArtista", columnNames = { "titolo", "artista" }) })
+@Entity 		//Recensioni memorizzerà una tabella contenente gli album
+@Table(name="albums", uniqueConstraints = { @UniqueConstraint(name = "UniqueTitoloArtista", columnNames = { "titolo", "artista" }) })
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Album {
 

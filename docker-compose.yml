@@ -2,6 +2,13 @@ name: bettermusic
 
 services:
   consul:
+    container_name: bettermusic-consul
     image: docker.io/hashicorp/consul:latest
     ports:
       - "8500:8500"
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    driver: bridge

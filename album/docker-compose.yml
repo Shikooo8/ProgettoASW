@@ -1,0 +1,14 @@
+services:
+  album-database:
+    image: postgres:16
+    container_name: album-db
+    environment:
+      POSTGRES_DB: album_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    driver: bridge

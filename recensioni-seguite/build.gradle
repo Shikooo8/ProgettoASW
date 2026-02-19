@@ -20,7 +20,13 @@ dependencies {
   implementation project(':connessioni-api')
   implementation project(':recensioni-api')
   implementation project(':recensioni-seguite-api')
-
+  implementation project(':album-api-event')
+  implementation project(':connessioni-api-event')
+  implementation project(':recensioni-api-event')
+  implementation project(':recensioni-seguite-api')
+  implementation project(':bettermusic-common-api-event')
+  
+implementation 'org.springframework.kafka:spring-kafka'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.cloud:spring-cloud-starter'
   implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'

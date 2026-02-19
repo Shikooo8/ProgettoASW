@@ -19,6 +19,7 @@ dependencies {
   implementation project(':album-api')
   implementation project(':album-api-event')
   implementation project(':bettermusic-common-api-event')
+  
   implementation 'org.springframework.kafka:spring-kafka'
   runtimeOnly 'org.postgresql:postgresql'
 

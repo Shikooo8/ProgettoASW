@@ -1,0 +1,14 @@
+services:
+  recensioni-seguite-database:
+    image: postgres:16
+    container_name: recensioniseguite-db
+    environment:
+      POSTGRES_DB: recensioniseguite_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    driver: bridge

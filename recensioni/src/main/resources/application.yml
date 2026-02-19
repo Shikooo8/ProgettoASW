@@ -19,6 +19,19 @@ spring:
     loadbalancer: 
       ribbon.enabled: false
 
+
+      datasource:
+    # Ogni servizio ha il suo database unico 
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/recensioni_db
+    username: postgres
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: "localhost:9092"
     #potrebbe essere kafka:9092
@@ -41,6 +54,6 @@ server:
   forward-headers-strategy: framework
 
 # fa il logging dei comandi sql eseguiti 
-#spring.jpa.show-sql: true
+spring.jpa.show-sql: true
 # disable OSIV
 spring.jpa.open-in-view: false

@@ -73,10 +73,14 @@ volumes:
 networks:
   album-network:
     driver: bridge
+    name: bettermusic_album-network
   recensioni-network:
     driver: bridge
+    name: bettermusic_recensioni-network
   connessioni-network:
     driver: bridge
+    name: bettermusic_connessioni-network
   recensioni-seguite-network:
     driver: bridge
+    name: bettermusic_recensioni-seguite-network
 

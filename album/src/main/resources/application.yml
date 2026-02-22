@@ -19,8 +19,7 @@ spring:
     open-in-view: false
 
   kafka:
-    bootstrap-servers: "localhost:9092"
-    #    bootstrap-servers: "kafka:9092"
+    bootstrap-servers: "kafka:9092"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       # Usa JSON per l'interscambio di messaggi 
@@ -28,7 +27,7 @@ spring:
 
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}

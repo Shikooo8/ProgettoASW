@@ -1,0 +1,82 @@
+name: bettermusic
+
+services:
+  album-db:
+    image: postgres:15
+    container_name: album-db
+    environment:
+      POSTGRES_DB: album_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - album_db_data:/var/lib/postgresql/data
+    networks:
+      - album-network
+  
+
+
+  recensioni-db:
+    image: postgres:15
+    container_name: recensioni-db
+    environment:
+      POSTGRES_DB: recensioni_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - recensioni_db_data:/var/lib/postgresql/data
+    networks:
+      - recensioni-network
+
+
+  connessioni-db:
+    image: postgres:15
+    container_name: connessioni-db
+    environment:
+      POSTGRES_DB: connessioni_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - connessioni_db_data:/var/lib/postgresql/data
+    networks:
+      - connessioni-network
+
+
+  recensioniseguite-db:
+    image: postgres:15
+    container_name: recensioniseguite-db
+    environment:
+      POSTGRES_DB: recensioniseguite_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    volumes:
+      - recensioniseguite_db_data:/var/lib/postgresql/data
+    networks:
+      - recensioni-seguite-network
+    
+    
+
+# Definizione dei volumi per non perdere i dati al riavvio
+volumes:
+  album_db_data:
+  recensioni_db_data:
+  connessioni_db_data:
+  recensioniseguite_db_data:  
+
+networks:
+  album-network:
+    driver: bridge
+  recensioni-network:
+    driver: bridge
+  connessioni-network:
+    driver: bridge
+  recensioni-seguite-network:
+    driver: bridge
+

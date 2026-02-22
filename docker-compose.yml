@@ -15,3 +15,4 @@ services:
 networks:
   service-network:
     driver: bridge
+    name: bettermusic_service-network

@@ -8,18 +8,18 @@ spring:
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     hibernate:
-      ddl-auto: update # Crea le tabelle automaticamente se non esistono
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
     open-in-view: false
 
   kafka:
     bootstrap-servers: "kafka:9092"
-    #    bootstrap-servers: "localhost:9092"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       # Usa JSON per l'interscambio di messaggi 
@@ -27,7 +27,7 @@ spring:
 
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
@@ -50,6 +50,4 @@ server:
 # disable OSIV
 spring.jpa.open-in-view: false
 
-#asw.kafka.channel.out=album-created-topic
-# Configura anche i serializer per inviare oggetti JSON 
-#spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+

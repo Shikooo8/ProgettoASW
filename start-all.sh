@@ -9,10 +9,10 @@ source start-consul.sh
 cd kafka/docker
 source start-kafka.sh
 cd ../..
-# È più pulito usare docker-compose per gestire i 4 database richiesti
-docker compose up -d album-db recensioni-db connessioni-db recensioniseguite-db
+source start-db.sh
 
-#  Attesa tecnica 
+#docker compose up -d album-db recensioni-db connessioni-db recensioniseguite-db
+
 # I database e Kafka devono essere pronti prima che le app si connettano
 echo "Attendendo che i database e Kafka siano pronti..."
 sleep 30

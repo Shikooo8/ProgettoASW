@@ -1,0 +1,61 @@
+name: bettermusic
+
+services:
+  album:
+    build: ./album
+    image: bettermusic-album
+    networks:
+      - service-network
+      - album-network
+
+
+  recensioni:
+    build: ./recensioni
+    image: bettermusic-recensioni
+    networks:
+      - service-network
+      - recensioni-network
+
+
+  connessioni:
+    build: ./connessioni
+    image: bettermusic-connessioni
+    networks:
+      - service-network
+      - connessioni-network
+
+
+  recensioni-seguite:
+    build: ./recensioni-seguite
+    image: bettermusic-recensioniseguite
+    networks:
+      - service-network
+      - recensioni-seguite-network
+  
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: bettermusic-api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - service-network
+
+
+networks:
+  service-network:
+    external: true
+    name: bettermusic_service-network
+  album-network:
+    external: true
+    name: bettermusic_album-network
+  recensioni-network:
+    external: true
+    name: bettermusic_recensioni-network
+  connessioni-network:
+    external: true
+    name: bettermusic_connessioni-network
+  recensioni-seguite-network:
+    external: true
+    name: bettermusic_recensioni-seguite-network
+

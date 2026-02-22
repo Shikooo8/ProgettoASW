@@ -5,14 +5,12 @@ spring:
     name: recensioni
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery: 
         instanceId: ${spring.application.name}-${spring.cloud.client.hostname}-${random.value}
         healthCheckPath: /actuator/health
         healthCheckInterval: 10s
-        # configurazione per effettuare esprimenti, NON USARE UN PRODUZIONE 
-        # dopo quanto tempo consul deve smettere di restituire servizi che non rispondono all'health check? 
         healthCheckCriticalTimeout: 45s
         # consul deve restituire solo servizi che passano l'health check (default=false) 
         queryPassing: true 
@@ -20,21 +18,23 @@ spring:
       ribbon.enabled: false
 
 
-      datasource:
+  datasource:
     # Ogni servizio ha il suo database unico 
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/recensioni_db
     username: postgres
     password: password
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop #update
+    generate-ddl: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
   kafka:
     bootstrap-servers: "kafka:9092"
-    #potrebbe essere kafka:9092
     consumer:
       group-id: ${spring.application.name}
       auto-offset-reset: earliest
